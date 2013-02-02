@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+	<PreferenceCategory
+   		android:summary="Alarm Settings"
+   		android:title="Alarm Settings" >
+		<RingtonePreference
+		    android:key="Audio"
+		    android:title="Alarm Noise" 
+		    android:showDefault="true"
+	     	android:ringtoneType="notification">
+	  	</RingtonePreference>
+  		<EditTextPreference
+		    android:key="@string/PreferenceSnoozeKey"
+		    android:summary="@string/PreferenceSnoozeSummary"
+		    android:title="Snooze" 
+		    android:numeric = "integer"
+		    android:defaultValue="10"/>
+	  	<EditTextPreference
+	  	    android:key="@string/PreferenceRepeatKey"
+		    android:summary="@string/PreferenceRepeatSummary"
+		    android:title="Repeat" 
+		    android:numeric = "integer"
+		    android:defaultValue="3"/>
+ 	</PreferenceCategory>
+ 	<PreferenceCategory
+ 		android:summary="Close Application Settings"
+   		android:title="Close Application Settings" >
+ 	    <CheckBoxPreference
+	  	    android:key="CloseOnSet"
+	  	    android:title="Set and close"
+	  	    android:summary="Close main screen when alarm is set">
+	  	</CheckBoxPreference>
+	  	<CheckBoxPreference
+	  	    android:key="CloseOnCancel"
+	  	    android:title="Cancel and close"
+	  	    android:summary="Close main screen when alarm is canceled">
+	  	</CheckBoxPreference>
+ 	</PreferenceCategory>
+</PreferenceScreen>

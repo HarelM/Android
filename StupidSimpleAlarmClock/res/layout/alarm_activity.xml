@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".AlarmActivity" >
+
+    <TextView
+        android:id="@+id/textViewCurrentTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_time"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="60sp" />
+
+    <Button
+        android:id="@+id/buttonSnooze"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:textSize="50sp"
+        android:text="@string/snooze" />
+
+    <Button
+        android:id="@+id/buttonStop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:textSize="50sp"
+        android:text="@string/stop" />
+    
+</LinearLayout>

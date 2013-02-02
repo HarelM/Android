@@ -1,0 +1,11 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+   <item 
+       android:state_focused="true"  
+       android:drawable="@drawable/selected_textview"/>
+   <item 
+       android:state_pressed="true" 
+       android:drawable="@drawable/selected_textview" />
+   <item  
+       android:state_focused="false"
+       android:drawable="@drawable/back_textview"/>
+</selector>

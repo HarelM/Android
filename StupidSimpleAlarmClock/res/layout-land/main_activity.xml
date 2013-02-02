@@ -1,0 +1,170 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/textViewSetTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:layout_margin="10dp"
+        android:text="@string/set_time"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="30sp" />
+
+    <TableRow
+        android:id="@+id/TableRowTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/textViewHour1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dip"
+            android:background="@drawable/selector_textview"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:text="@string/Zero"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="50sp" />
+
+        <TextView
+            android:id="@+id/textViewHour2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dip"
+            android:background="@drawable/selector_textview"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="top|center"
+            android:text="@string/Zero"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="50sp" />
+
+        <TextView
+            android:id="@+id/textViewSeparator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:text="@string/colon"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="50sp" />
+
+        <TextView
+            android:id="@+id/textViewMinute1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dip"
+            android:background="@drawable/selector_textview"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:text="@string/Zero"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="50sp" />
+
+        <TextView
+            android:id="@+id/textViewMinute2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dip"
+            android:background="@drawable/selector_textview"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:text="@string/Zero"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="50sp" />
+    </TableRow>
+
+    <TableLayout
+        android:id="@+id/TableLayoutNumbers"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:stretchColumns="*" >
+
+        <TableRow
+            android:id="@+id/tableRow1to5"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <Button
+                android:id="@+id/Button1"
+                style="@style/number_button"
+                android:text="@string/Key1" />
+
+            <Button
+                android:id="@+id/Button2"
+                style="@style/number_button"
+                android:text="@string/Key2" />
+
+            <Button
+                android:id="@+id/Button3"
+                style="@style/number_button"
+                android:text="@string/Key3" />
+
+            <Button
+                android:id="@+id/Button4"
+                style="@style/number_button"
+                android:text="@string/Key4" />
+
+            <Button
+                android:id="@+id/Button5"
+               style="@style/number_button"
+                android:text="@string/Key5" />
+
+            <Button
+                android:id="@+id/ButtonSet"
+                style="@style/number_button"
+                android:text="@string/Set" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow6to0"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <Button
+                android:id="@+id/Button6"
+                style="@style/number_button"
+                android:text="@string/Key6" />
+
+            <Button
+                android:id="@+id/Button7"
+                style="@style/number_button"
+                android:text="@string/Key7" />
+
+            <Button
+                android:id="@+id/Button8"
+                style="@style/number_button"
+                android:text="@string/Key8" />
+
+            <Button
+                android:id="@+id/Button9"
+                style="@style/number_button"
+                android:text="@string/Key9" />
+
+            <Button
+                android:id="@+id/Button0"
+                style="@style/number_button"
+                android:text="@string/Key0" />
+
+            <Button
+                android:id="@+id/ButtonCancel"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="@string/Cancel" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>
