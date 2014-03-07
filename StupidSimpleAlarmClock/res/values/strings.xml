@@ -2,11 +2,10 @@
 <resources>
 
     <string name="app_name">Stupid Simple Alarm Clock</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="set_time">Set Alarm Time</string>
     <string name="colon">:</string>
-    <string name="default_time">08:00</string>
+    <string name="DefaultTime">08:00</string>
     <string name="snooze">Snooze</string>
     <string name="stop">Stop</string>
     <string name="Zero">0</string>
@@ -26,9 +25,30 @@
     <string name="Key45">45</string>
     <string name="Set">Set</string>
     <string name="Cancel">Cancel</string>
-    <string name="PreferenceSnoozeKey">Snooze</string>
-    <string name="PreferenceRepeatKey">Repeat</string>
     <string name="PreferenceCurrentSummary">Current value is:</string>
+    
+    <string name="PreferenceAlarmSettings">Alarm Settings</string>
+    <string name="PreferenceAlarmNoiseKey">Audio</string>
+    <string name="PreferenceAlarmNoiseTitle">Alarm Noise</string>
+    <string name="PreferenceSnooze">Snooze</string>
     <string name="PreferenceSnoozeSummary">Time in minues between snooze</string>
+    <string name="PreferenceRepeat">Repeat</string>
     <string name="PreferenceRepeatSummary">How many times to allow snooze\n(0 for infinity, 1 for none)</string>
+    <string name="PreferenceShowNotificationIconKey">ShowNotificationIcon</string>
+    <string name="PreferenceShowNotificationIconTitle">Show Notification Icon</string>
+    <string name="PreferenceShowNotificationIconSummary">Show notification icon when the alarm is set</string>
+    <string name="PreferenceUseDefaultTimeKey">UseDefaultTime</string>
+    <string name="PreferenceUseDefaultTimeTitle">Use Default Time</string>
+    <string name="PreferenceUseDefaultTimeSummary">Application will start with a defined time</string>    
+    <string name="PreferenceDefaultTimeKey">DefaultTime</string>
+    <string name="PreferenceDefaultTimeTitle">Default Time</string>
+    <string name="PreferenceDefaultTimeSummary">The default time the application will start with</string>
+   
+    <string name="PreferenceCloseApplicationSettings">Close Application Settings</string>    
+    <string name="PreferenceCloseOnSetKey">CloseOnSet</string>
+    <string name="PreferenceCloseOnSetTitle">Set and close</string>
+    <string name="PreferenceCloseOnSetSummary">Close main screen when alarm is set</string>    
+    <string name="PreferenceCloseOnCancelKey">CloseOnCancel</string>
+    <string name="PreferenceCloseOnCancelTitle">Cancel and close</string>
+    <string name="PreferenceCloseOnCancelSummary">Close main screen when alarm is canceled</string>
 </resources>

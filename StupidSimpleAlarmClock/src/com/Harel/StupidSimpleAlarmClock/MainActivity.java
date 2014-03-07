@@ -31,6 +31,14 @@ public class MainActivity extends Activity {
 
 	public static final int NOTIFICATION_ID = 811984;
 
+	public static final String ALARM_IS_SET = "AlarmIsSet";
+	public static final String SNOOZE_LEFT = "SnoozeLeft";
+	private static final String HOUR_1 = "Hour1";
+	private static final String HOUR_2 = "Hour2";
+	private static final String MINUTE_1 = "Minute1";
+	private static final String MINUTE_2 = "Minute2";
+	
+	
 	private TextView m_textViewHour1;
 	private TextView m_textViewHour2;
 	private TextView m_textViewMinute1;
@@ -45,8 +53,6 @@ public class MainActivity extends Activity {
 		initAlarmButtons();
 		initTextViews();
 		initButtons();
-
-		// HM TODO: handle orientation change in sound
 	}
 
 	@Override
@@ -76,11 +82,10 @@ public class MainActivity extends Activity {
 	private void saveSettings() {
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		SharedPreferences.Editor editor = settings.edit();
-		editor.putString("Hour1", m_textViewHour1.getText().toString());
-		editor.putString("Hour2", m_textViewHour2.getText().toString());
-		editor.putString("Minutes1", m_textViewMinute1.getText().toString());
-		editor.putString("Minutes2", m_textViewMinute2.getText().toString());
-		// Commit the edits!
+		editor.putString(HOUR_1, m_textViewHour1.getText().toString());
+		editor.putString(HOUR_2, m_textViewHour2.getText().toString());
+		editor.putString(MINUTE_1, m_textViewMinute1.getText().toString());
+		editor.putString(MINUTE_2, m_textViewMinute2.getText().toString());
 		editor.commit();
 	}
 
@@ -92,7 +97,7 @@ public class MainActivity extends Activity {
 		Intent activate = new Intent(MainActivity.this, AlarmReceiver.class);
 		final PendingIntent alarmIntent = PendingIntent.getBroadcast(MainActivity.this, 0, activate, 0);
 		final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
+		
 		final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
 		buttonSet.setOnClickListener(new OnClickListener() {
@@ -113,16 +118,15 @@ public class MainActivity extends Activity {
 						+ String.valueOf(iTotalMinutes % 60) + " Minutes.";
 
 				SharedPreferences.Editor editor = settings.edit();
-				editor.putInt("SnoozeLeft", AlarmPreferencesActivity.getSnooze(settings, MainActivity.this) - 1);
-				// Commit the edits!
+				editor.putInt(SNOOZE_LEFT, AlarmPreferencesActivity.getSnooze(settings, MainActivity.this) - 1);
 				editor.commit();
 
 				saveSettings();
 				MainActivity.enableNotificationIcon(true, MainActivity.this, alarmTime);
 
 				Toast.makeText(MainActivity.this, toastText, Toast.LENGTH_SHORT).show();
-
-				if (settings.getBoolean("CloseOnSet", false) == true) {
+				boolean bCloseOnSet = settings.getBoolean(MainActivity.this.getString(R.string.PreferenceCloseOnSetKey), false);
+				if (bCloseOnSet == true) {
 					finish();
 				}
 			}
@@ -137,8 +141,9 @@ public class MainActivity extends Activity {
 				toastText = "Alarm canceled.";
 				MainActivity.enableNotificationIcon(false, MainActivity.this, new Date());
 				Toast.makeText(MainActivity.this, toastText, Toast.LENGTH_SHORT).show();
-
-				if (settings.getBoolean("CloseOnCancel", false) == true) {
+				
+				boolean bCloseOnCancel = settings.getBoolean(MainActivity.this.getString(R.string.PreferenceCloseOnCancelKey), false);
+				if (bCloseOnCancel == true) {
 					finish();
 				}
 			}
@@ -153,10 +158,25 @@ public class MainActivity extends Activity {
 		m_textViewMinute2 = (TextView) findViewById(R.id.textViewMinute2);
 
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-		m_textViewHour1.setText(settings.getString("Hour1", "0"));
-		m_textViewHour2.setText(settings.getString("Hour2", "8"));
-		m_textViewMinute1.setText(settings.getString("Minutes1", "0"));
-		m_textViewMinute2.setText(settings.getString("Minutes2", "0"));
+		boolean bUseDefaultTime = settings.getBoolean(getString(R.string.PreferenceUseDefaultTimeKey), false);
+		Boolean bAlarmIsSet = settings.getBoolean(ALARM_IS_SET, false);
+		if (bUseDefaultTime == true && bAlarmIsSet == false)
+		{
+			String sDefaultTime = settings.getString(getString(R.string.PreferenceDefaultTimeKey), getString(R.string.DefaultTime));
+			int iHour = TimePreference.getHour(sDefaultTime);
+			int iMinute = TimePreference.getMinute(sDefaultTime);
+			m_textViewHour1.setText(String.valueOf(iHour / 10));
+			m_textViewHour2.setText(String.valueOf(iHour % 10));
+			m_textViewMinute1.setText(String.valueOf(iMinute / 10));
+			m_textViewMinute2.setText(String.valueOf(iMinute % 10));
+		}
+		else
+		{
+			m_textViewHour1.setText(settings.getString(HOUR_1, "0"));
+			m_textViewHour2.setText(settings.getString(HOUR_2, "8"));
+			m_textViewMinute1.setText(settings.getString(MINUTE_1, "0"));
+			m_textViewMinute2.setText(settings.getString(MINUTE_2, "0"));
+		}
 		m_textViewSelected = m_textViewHour1;
 
 		OnTouchListener textViewOnTouchListener = new OnTouchListener() {
@@ -335,6 +355,7 @@ public class MainActivity extends Activity {
 
 		date.setHours(iHours);
 		date.setMinutes(iMinutes);
+		date.setSeconds(0); // HM for debug - remove this
 
 		if (date.before(calendar.getTime())) {
 			calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -349,29 +370,40 @@ public class MainActivity extends Activity {
 	public static void enableNotificationIcon(boolean bEnable, Context context, Date dateAlarm) {
 		NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
-		if (bEnable == true) {
-			String sAlarmTime = "Alarm is set to: " + String.format("%02d", dateAlarm.getHours())
-					+ context.getString(R.string.colon) + String.format("%02d", dateAlarm.getMinutes());
-			NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-					.setSmallIcon(R.drawable.ic_launcher).setContentTitle("Alarm Clock").setContentText(sAlarmTime);
-			// Creates an explicit intent for an Activity in your application
-			Intent resultIntent = new Intent(context, MainActivity.class);
-
-			// The stack builder object will contain an artificial back stack
-			// for the started Activity.
-			// This ensures that navigating backward from the Activity leads out
-			// of your application to the Home screen.
-			TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-			// Adds the back stack for the Intent (but not the Intent itself)
-			stackBuilder.addParentStack(MainActivity.class);
-			// Adds the Intent that starts the Activity to the top of the stack
-			stackBuilder.addNextIntent(resultIntent);
-			PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-			builder.setContentIntent(resultPendingIntent);
-
-			notificationManager.notify(NOTIFICATION_ID, builder.build());
-		} else {
+		
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+		boolean bEnabledInSettings = settings.getBoolean(context.getString(R.string.PreferenceShowNotificationIconKey), true);
+		
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putBoolean(ALARM_IS_SET, bEnable);
+		editor.commit();
+		
+		if (bEnable == false || bEnabledInSettings == false) {
 			notificationManager.cancel(NOTIFICATION_ID);
+			return;
 		}
+		String sAlarmTime = "Alarm is set to: " + String.format("%02d", dateAlarm.getHours())
+				+ context.getString(R.string.colon) + String.format("%02d", dateAlarm.getMinutes());
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+				.setSmallIcon(R.drawable.ic_launcher)
+				.setContentTitle("Alarm Clock")
+				.setContentText(sAlarmTime)
+				.setOngoing(true);
+		// Creates an explicit intent for an Activity in your application
+		Intent resultIntent = new Intent(context, MainActivity.class);
+
+		// The stack builder object will contain an artificial back stack
+		// for the started Activity.
+		// This ensures that navigating backward from the Activity leads out
+		// of your application to the Home screen.
+		TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+		// Adds the back stack for the Intent (but not the Intent itself)
+		stackBuilder.addParentStack(MainActivity.class);
+		// Adds the Intent that starts the Activity to the top of the stack
+		stackBuilder.addNextIntent(resultIntent);
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+		builder.setContentIntent(resultPendingIntent);
+
+		notificationManager.notify(NOTIFICATION_ID, builder.build());
 	}
 }

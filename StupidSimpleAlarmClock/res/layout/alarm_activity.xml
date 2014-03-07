@@ -10,7 +10,7 @@
         android:id="@+id/textViewCurrentTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/default_time"
+        android:text="@string/DefaultTime"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="60sp" />
 

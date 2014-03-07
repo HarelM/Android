@@ -1,39 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 	<PreferenceCategory
-   		android:summary="Alarm Settings"
-   		android:title="Alarm Settings" >
+	    android:title="@string/PreferenceAlarmSettings"
+   		android:summary="@string/PreferenceAlarmSettings">
 		<RingtonePreference
-		    android:key="Audio"
-		    android:title="Alarm Noise" 
+		    android:key="@string/PreferenceAlarmNoiseKey"
+		    android:title="@string/PreferenceAlarmNoiseTitle" 
 		    android:showDefault="true"
-	     	android:ringtoneType="notification">
+		    android:showSilent="false"
+	     	android:ringtoneType="notification|ringtone"
+	     	android:defaultValue="content://settings/system/notification_sound">
 	  	</RingtonePreference>
   		<EditTextPreference
-		    android:key="@string/PreferenceSnoozeKey"
+		    android:key="@string/PreferenceSnooze"
+		    android:title="@string/PreferenceSnooze"
 		    android:summary="@string/PreferenceSnoozeSummary"
-		    android:title="Snooze" 
 		    android:numeric = "integer"
 		    android:defaultValue="10"/>
 	  	<EditTextPreference
-	  	    android:key="@string/PreferenceRepeatKey"
+	  	    android:key="@string/PreferenceRepeat"
+	  	    android:title="@string/PreferenceRepeat"
 		    android:summary="@string/PreferenceRepeatSummary"
-		    android:title="Repeat" 
 		    android:numeric = "integer"
 		    android:defaultValue="3"/>
+	  	<CheckBoxPreference
+	  	    android:key="@string/PreferenceShowNotificationIconKey"
+	  	    android:title="@string/PreferenceShowNotificationIconTitle"
+	  	    android:summary="@string/PreferenceShowNotificationIconSummary"
+	  	    android:defaultValue="true" />
+	  	<CheckBoxPreference
+	  	    android:key="@string/PreferenceUseDefaultTimeKey"
+	  	    android:title="@string/PreferenceUseDefaultTimeTitle"
+	  	    android:summary="@string/PreferenceUseDefaultTimeSummary" />
+	  	<com.Harel.StupidSimpleAlarmClock.TimePreference 
+	  	    android:key="@string/PreferenceDefaultTimeKey" 
+	  	    android:title="@string/PreferenceDefaultTimeTitle"
+	  	    android:summary="@string/PreferenceDefaultTimeSummary"
+	  	    android:dependency="@string/PreferenceUseDefaultTimeKey"
+	  	    android:defaultValue="@string/DefaultTime"/>
  	</PreferenceCategory>
  	<PreferenceCategory
- 		android:summary="Close Application Settings"
-   		android:title="Close Application Settings" >
+ 	    android:title="@string/PreferenceCloseApplicationSettings"
+ 		android:summary="@string/PreferenceCloseApplicationSettings" >
  	    <CheckBoxPreference
-	  	    android:key="CloseOnSet"
-	  	    android:title="Set and close"
-	  	    android:summary="Close main screen when alarm is set">
+	  	    android:key="@string/PreferenceCloseOnSetKey"
+	  	    android:title="@string/PreferenceCloseOnSetTitle"
+	  	    android:summary="@string/PreferenceCloseOnSetSummary">
 	  	</CheckBoxPreference>
 	  	<CheckBoxPreference
-	  	    android:key="CloseOnCancel"
-	  	    android:title="Cancel and close"
-	  	    android:summary="Close main screen when alarm is canceled">
+	  	    android:key="@string/PreferenceCloseOnCancelKey"
+	  	    android:title="@string/PreferenceCloseOnCancelTitle"
+	  	    android:summary="@string/PreferenceCloseOnCancelSummary">
 	  	</CheckBoxPreference>
  	</PreferenceCategory>
 </PreferenceScreen>

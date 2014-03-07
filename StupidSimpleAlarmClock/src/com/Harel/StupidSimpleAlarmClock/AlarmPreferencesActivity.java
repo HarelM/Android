@@ -11,16 +11,19 @@ public class AlarmPreferencesActivity extends PreferenceActivity implements OnSh
 
 	private EditTextPreference m_EditTextPreferenceSnooze;
 	private EditTextPreference m_EditTextPreferenceRepeat;
+	private TimePreference m_TimePreferenceDefaultTime;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
 
-		m_EditTextPreferenceRepeat = (EditTextPreference) getPreferenceScreen().findPreference(
-				getString(R.string.PreferenceRepeatKey));
-		m_EditTextPreferenceSnooze = (EditTextPreference) getPreferenceScreen().findPreference(
-				getString(R.string.PreferenceSnoozeKey));
+		m_EditTextPreferenceRepeat = (EditTextPreference)getPreferenceScreen()
+				.findPreference(getString(R.string.PreferenceRepeat));
+		m_EditTextPreferenceSnooze = (EditTextPreference)getPreferenceScreen()
+				.findPreference(getString(R.string.PreferenceSnooze));
+		m_TimePreferenceDefaultTime = (TimePreference)getPreferenceScreen()
+				.findPreference(getString(R.string.PreferenceDefaultTimeKey));
 	}
 
 	@Override
@@ -29,9 +32,10 @@ public class AlarmPreferencesActivity extends PreferenceActivity implements OnSh
 
 		// Setup the initial values
 		SharedPreferences settings = getPreferenceScreen().getSharedPreferences();
-		onSharedPreferenceChanged(settings, getString(R.string.PreferenceSnoozeKey));
-		onSharedPreferenceChanged(settings, getString(R.string.PreferenceRepeatKey));
-
+		onSharedPreferenceChanged(settings, getString(R.string.PreferenceSnooze));
+		onSharedPreferenceChanged(settings, getString(R.string.PreferenceRepeat));
+		onSharedPreferenceChanged(settings, getString(R.string.PreferenceDefaultTimeKey));
+		
 		// Set up a listener whenever a key changes
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 	}
@@ -46,20 +50,29 @@ public class AlarmPreferencesActivity extends PreferenceActivity implements OnSh
 
 	public void onSharedPreferenceChanged(SharedPreferences settings, String key) {
 		// Let's do something a preference value changes
-		if (key.equals(getString(R.string.PreferenceRepeatKey))) {
+		if (key.equals(getString(R.string.PreferenceRepeat))) 
+		{
 			m_EditTextPreferenceRepeat.setSummary(getString(R.string.PreferenceRepeatSummary) + "\n"
 					+ getString(R.string.PreferenceCurrentSummary) + " "
 					+ String.valueOf(AlarmPreferencesActivity.getRepeat(settings, this)));
-		} else if (key.equals(getString(R.string.PreferenceSnoozeKey))) {
+		} 
+		else if (key.equals(getString(R.string.PreferenceSnooze))) 
+		{
 			m_EditTextPreferenceSnooze.setSummary(getString(R.string.PreferenceSnoozeSummary) + "\n"
 					+ getString(R.string.PreferenceCurrentSummary) + " "
 					+ String.valueOf(AlarmPreferencesActivity.getSnooze(settings, this)));
 		}
+		else if (key.equals(getString(R.string.PreferenceDefaultTimeKey))) 
+		{
+			m_TimePreferenceDefaultTime.setSummary(getString(R.string.PreferenceDefaultTimeSummary) + "\n"
+					+ getString(R.string.PreferenceCurrentSummary) + " "
+					+ settings.getString(getString(R.string.PreferenceDefaultTimeKey), getString(R.string.DefaultTime)));
+		}	
 	}
 
 	public static int getSnooze(SharedPreferences settings, Context context) {
 		try {
-			return Integer.parseInt(settings.getString(context.getString(R.string.PreferenceSnoozeKey), "10"));
+			return Integer.parseInt(settings.getString(context.getString(R.string.PreferenceSnooze), "10"));
 		} catch (NumberFormatException e) {
 			return 10;
 		}
@@ -68,7 +81,7 @@ public class AlarmPreferencesActivity extends PreferenceActivity implements OnSh
 
 	public static int getRepeat(SharedPreferences settings, Context context) {
 		try {
-			return Integer.parseInt(settings.getString(context.getString(R.string.PreferenceRepeatKey), "3"));
+			return Integer.parseInt(settings.getString(context.getString(R.string.PreferenceRepeat), "3"));
 		} catch (NumberFormatException e) {
 			return 3;
 		}

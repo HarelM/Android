@@ -22,6 +22,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class AlarmActivity extends Activity {
+	
+	private static final String POSITION = "Position";
+	
 	Button m_buttonSnooze;
 	Button m_buttonStop;
 	TextView m_textViewCurrentTime;
@@ -59,13 +62,13 @@ public class AlarmActivity extends Activity {
 	protected void onSaveInstanceState(Bundle outState) {
 		m_MediaPlayer.pause();
 		m_iPosition = m_MediaPlayer.getCurrentPosition();
-		outState.putInt("Position", m_iPosition);
+		outState.putInt(POSITION, m_iPosition);
 		super.onSaveInstanceState(outState);
 	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		m_iPosition = savedInstanceState.getInt("Position");
+		m_iPosition = savedInstanceState.getInt(POSITION);
 		super.onRestoreInstanceState(savedInstanceState);
 	}
 
@@ -92,7 +95,7 @@ public class AlarmActivity extends Activity {
 			public void onClick(View view) {
 
 				SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-				int iSnoozeLeft = settings.getInt("SnoozeLeft", 1);
+				int iSnoozeLeft = settings.getInt(MainActivity.SNOOZE_LEFT, 1);
 				MainActivity.enableNotificationIcon(false, AlarmActivity.this, new Date());
 				if (iSnoozeLeft != 0) {
 					Intent activate = new Intent(AlarmActivity.this, AlarmReceiver.class);
@@ -105,7 +108,7 @@ public class AlarmActivity extends Activity {
 					alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
 
 					SharedPreferences.Editor editor = settings.edit();
-					editor.putInt("SnoozeLeft", iSnoozeLeft - 1); // disabling
+					editor.putInt(MainActivity.SNOOZE_LEFT, iSnoozeLeft - 1); // disabling
 					// Commit the edits!
 					editor.commit();
 
@@ -132,16 +135,25 @@ public class AlarmActivity extends Activity {
 
 	private void prepareSound() {
 		SharedPreferences getAlarms = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-		String alarms = getAlarms.getString("Audio", "default ringtone");
+		String str = getString(R.string.PreferenceAlarmNoiseKey);
+		String alarms = getAlarms.getString(str, android.provider.Settings.System.DEFAULT_RINGTONE_URI.toString());
 		Uri uri = Uri.parse(alarms);
 		m_MediaPlayer = new MediaPlayer();
 		try {
 			m_MediaPlayer.setDataSource(this, uri);
 			final AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-			if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
-				m_MediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+			for (int iType : new int[]{ AudioManager.STREAM_ALARM, AudioManager.STREAM_NOTIFICATION, AudioManager.STREAM_RING, AudioManager.STREAM_SYSTEM})
+			{
+				int iVolume = audioManager.getStreamVolume(iType);
+				if (iVolume <= 0)
+				{
+					continue;
+				}
+				// setting the type of the first one that has volume other than zero 
+				m_MediaPlayer.setAudioStreamType(iType);
 				m_MediaPlayer.prepare();
 				m_MediaPlayer.setLooping(true);
+				break;
 			}
 		} catch (IOException e) {
 			Log.d("StupidSimpleAlarmClock", "Problem playing the selected sound");
