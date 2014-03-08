@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|top"
         android:layout_margin="10dp"
-        android:text="@string/set_time"
+        android:text="@string/SetTime"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="30sp" />
 

@@ -20,7 +20,7 @@
         android:layout_height="match_parent"
         android:layout_weight="0.5"
         android:textSize="50sp"
-        android:text="@string/snooze" />
+        android:text="@string/Snooze" />
 
     <Button
         android:id="@+id/buttonStop"
@@ -28,6 +28,6 @@
         android:layout_height="match_parent"
         android:layout_weight="0.5"
         android:textSize="50sp"
-        android:text="@string/stop" />
+        android:text="@string/Stop" />
     
 </LinearLayout>

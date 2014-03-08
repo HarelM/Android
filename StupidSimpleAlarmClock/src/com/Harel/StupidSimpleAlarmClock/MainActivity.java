@@ -377,7 +377,7 @@ public class MainActivity extends Activity {
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean(ALARM_IS_SET, bEnable);
 		editor.commit();
-		
+
 		if (bEnable == false || bEnabledInSettings == false) {
 			notificationManager.cancel(NOTIFICATION_ID);
 			return;
