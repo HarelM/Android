@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Zero">0</string>
+    <string name="Key0">0</string>
+    <string name="Key1">1</string>
+    <string name="Key2">2</string>
+    <string name="Key3">3</string>
+    <string name="Key4">4</string>
+    <string name="Key5">5</string>
+    <string name="Key6">6</string>
+    <string name="Key7">7</string>
+    <string name="Key8">8</string>
+    <string name="Key9">9</string>
+    <string name="Key00">00</string>
+    <string name="Key15">15</string>
+    <string name="Key30">30</string>
+    <string name="Key45">45</string>
+    <string name="colon">:</string>
+    <string name="DefaultTime">08:00</string>
+    
     <string name="Set">Set</string>
     <string name="app_name">Stupid Simple Alarm Clock</string>
     <string name="MenuSettings">Settings</string>
