@@ -355,7 +355,7 @@ public class MainActivity extends Activity {
 
 		date.setHours(iHours);
 		date.setMinutes(iMinutes);
-		date.setSeconds(0); // HM for debug - remove this
+		date.setSeconds(0); // HM for debug : comment this line
 
 		if (date.before(calendar.getTime())) {
 			calendar.add(Calendar.DAY_OF_MONTH, 1);

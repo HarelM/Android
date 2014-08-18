@@ -46,6 +46,7 @@ public class AlarmActivity extends Activity {
 		initButtons();
 
 		m_iPosition = 0;
+		m_MediaPlayer = null;
 	}
 
 	@Override
@@ -74,9 +75,7 @@ public class AlarmActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		if (m_MediaPlayer.isPlaying() == true) {
-			m_MediaPlayer.stop();
-		}
+		stopAndReleaseMediaPlayer();
 		super.onDestroy();
 	}
 
@@ -138,11 +137,17 @@ public class AlarmActivity extends Activity {
 		String str = getString(R.string.PreferenceAlarmNoiseKey);
 		String alarms = getAlarms.getString(str, android.provider.Settings.System.DEFAULT_RINGTONE_URI.toString());
 		Uri uri = Uri.parse(alarms);
+		stopAndReleaseMediaPlayer();
 		m_MediaPlayer = new MediaPlayer();
 		try {
 			m_MediaPlayer.setDataSource(this, uri);
 			final AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-			for (int iType : new int[]{ AudioManager.STREAM_ALARM, AudioManager.STREAM_NOTIFICATION, AudioManager.STREAM_RING, AudioManager.STREAM_SYSTEM})
+			for (int iType : new int[]{ 
+					AudioManager.STREAM_ALARM, 
+					AudioManager.STREAM_NOTIFICATION, 
+					AudioManager.STREAM_RING, 
+					AudioManager.STREAM_SYSTEM,
+					AudioManager.STREAM_MUSIC})
 			{
 				int iVolume = audioManager.getStreamVolume(iType);
 				if (iVolume <= 0)
@@ -158,5 +163,18 @@ public class AlarmActivity extends Activity {
 		} catch (IOException e) {
 			Log.d("StupidSimpleAlarmClock", "Problem playing the selected sound");
 		}
+	}
+	
+	private void stopAndReleaseMediaPlayer()
+	{
+		if (m_MediaPlayer == null)
+		{
+			return;
+		}
+		if (m_MediaPlayer.isPlaying() == true) {
+			m_MediaPlayer.stop();
+		}
+		m_MediaPlayer.release();
+		m_MediaPlayer = null;
 	}
 }
