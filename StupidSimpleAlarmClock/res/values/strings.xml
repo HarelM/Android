@@ -51,4 +51,7 @@
     <string name="PreferenceCloseOnCancelKey">CloseOnCancel</string>
     <string name="PreferenceCloseOnCancelTitle">Cancel and close</string>
     <string name="PreferenceCloseOnCancelSummary">Close main screen when alarm is canceled</string>
+    <string name="PreferenceShowTimeLeftKey">ShowTimeLeft</string>
+    <string name="PreferenceShowTimeLeftTitle">Show time left</string>
+    <string name="PreferenceShowTimeLeftSummary">Show how much time is left unitl next alarm - if disabled it will only show "Alarm is set."</string>
 </resources>

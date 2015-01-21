@@ -24,6 +24,7 @@ import android.widget.TextView;
 public class AlarmActivity extends Activity {
 	
 	private static final String POSITION = "Position";
+	private static final String ORIGINAL_VOLUME = "OriginalVolume";
 	
 	Button m_buttonSnooze;
 	Button m_buttonStop;
@@ -31,6 +32,7 @@ public class AlarmActivity extends Activity {
 
 	private MediaPlayer m_MediaPlayer;
 	private int m_iPosition;
+	private int m_iOriginalAlarmVolume;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class AlarmActivity extends Activity {
 		initButtons();
 
 		m_iPosition = 0;
+		m_iOriginalAlarmVolume = -1;
 		m_MediaPlayer = null;
 	}
 
@@ -64,17 +67,24 @@ public class AlarmActivity extends Activity {
 		m_MediaPlayer.pause();
 		m_iPosition = m_MediaPlayer.getCurrentPosition();
 		outState.putInt(POSITION, m_iPosition);
+		outState.putInt(ORIGINAL_VOLUME, m_iOriginalAlarmVolume);
 		super.onSaveInstanceState(outState);
 	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		m_iPosition = savedInstanceState.getInt(POSITION);
+		m_iOriginalAlarmVolume = savedInstanceState.getInt(ORIGINAL_VOLUME);
 		super.onRestoreInstanceState(savedInstanceState);
 	}
 
 	@Override
 	protected void onDestroy() {
+		if (m_iOriginalAlarmVolume != -1)
+		{
+			final AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+			audioManager.setStreamVolume(AudioManager.STREAM_ALARM, m_iOriginalAlarmVolume, 0);
+		}
 		stopAndReleaseMediaPlayer();
 		super.onDestroy();
 	}
@@ -142,24 +152,18 @@ public class AlarmActivity extends Activity {
 		try {
 			m_MediaPlayer.setDataSource(this, uri);
 			final AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-			for (int iType : new int[]{ 
-					AudioManager.STREAM_ALARM, 
-					AudioManager.STREAM_NOTIFICATION, 
-					AudioManager.STREAM_RING, 
-					AudioManager.STREAM_SYSTEM,
-					AudioManager.STREAM_MUSIC})
+			int iVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+			if (iVolume <= 0)
 			{
-				int iVolume = audioManager.getStreamVolume(iType);
-				if (iVolume <= 0)
-				{
-					continue;
-				}
-				// setting the type of the first one that has volume other than zero 
-				m_MediaPlayer.setAudioStreamType(iType);
-				m_MediaPlayer.prepare();
-				m_MediaPlayer.setLooping(true);
-				break;
-			}
+				// if we are on silent mode, we'll change the volume and revert when finished. 
+				m_iOriginalAlarmVolume = iVolume;
+				audioManager.setStreamVolume(AudioManager.STREAM_ALARM, 
+						audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 
+						0);
+			} 
+			m_MediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);	
+			m_MediaPlayer.prepare();
+			m_MediaPlayer.setLooping(true);
 		} catch (IOException e) {
 			Log.d("StupidSimpleAlarmClock", "Problem playing the selected sound");
 		}

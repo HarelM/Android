@@ -52,5 +52,11 @@
 	  	    android:title="@string/PreferenceCloseOnCancelTitle"
 	  	    android:summary="@string/PreferenceCloseOnCancelSummary">
 	  	</CheckBoxPreference>
+	  	<CheckBoxPreference
+	  	    android:key="@string/PreferenceShowTimeLeftKey"
+	  	    android:title="@string/PreferenceShowTimeLeftTitle"
+	  	    android:summary="@string/PreferenceShowTimeLeftSummary"
+	  	    android:defaultValue="true">
+	  	</CheckBoxPreference>
  	</PreferenceCategory>
 </PreferenceScreen>

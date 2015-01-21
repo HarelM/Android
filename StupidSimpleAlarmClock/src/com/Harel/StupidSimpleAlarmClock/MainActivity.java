@@ -104,27 +104,29 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 
-				CharSequence toastText = "";
 				alarmManager.cancel(alarmIntent); // cancel previous alarms
 				Date alarmTime = getAlarmTime();
 				alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime.getTime(), alarmIntent);
 
-				Calendar cal = Calendar.getInstance();
-				cal.setTimeInMillis(System.currentTimeMillis());
-				long lMillisecondsToAlarm = alarmTime.getTime() - cal.getTimeInMillis();
-				int iTotalMinutes = (int) lMillisecondsToAlarm / (1000 * 60);
-
-				toastText = "Alarm set to " + String.valueOf(iTotalMinutes / 60) + " hours and "
-						+ String.valueOf(iTotalMinutes % 60) + " Minutes.";
-
+				String toastText = "Alarm is set";
+				boolean bShowHoursLeft = settings.getBoolean(MainActivity.this.getString(R.string.PreferenceShowTimeLeftKey), true);
+				if (bShowHoursLeft == true) {
+					Calendar cal = Calendar.getInstance();
+					cal.setTimeInMillis(System.currentTimeMillis());
+					long lMillisecondsToAlarm = alarmTime.getTime() - cal.getTimeInMillis();
+					int iTotalMinutes = (int) lMillisecondsToAlarm / (1000 * 60);
+					toastText += " to " + String.valueOf(iTotalMinutes / 60) + " hours and "
+							+ String.valueOf(iTotalMinutes % 60) + " minutes";
+				}
+				Toast.makeText(MainActivity.this, toastText + ".", Toast.LENGTH_SHORT).show();
+				
 				SharedPreferences.Editor editor = settings.edit();
 				editor.putInt(SNOOZE_LEFT, AlarmPreferencesActivity.getSnooze(settings, MainActivity.this) - 1);
 				editor.commit();
 
 				saveSettings();
 				MainActivity.enableNotificationIcon(true, MainActivity.this, alarmTime);
-
-				Toast.makeText(MainActivity.this, toastText, Toast.LENGTH_SHORT).show();
+				
 				boolean bCloseOnSet = settings.getBoolean(MainActivity.this.getString(R.string.PreferenceCloseOnSetKey), false);
 				if (bCloseOnSet == true) {
 					finish();
